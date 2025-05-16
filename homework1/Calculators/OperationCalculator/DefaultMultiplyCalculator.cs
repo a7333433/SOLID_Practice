@@ -1,4 +1,5 @@
-﻿using System;
+﻿using homework1.Loggers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace homework1.Calculators.OperationCalculator
 {
-    public class DefaultMultiplyCalculator : ITwoParameterOperationCalculator
+    public class DefaultMultiplyCalculator : IBinaryOperationCalculator
     {
         private readonly ILogger logger;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using homework1.Loggers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,35 @@ namespace homework1.Calculators.OperationCalculator
 {
     internal class DefaultOperationFactory : IOperationCalculatorFactory
     {
-        private static Dictionary<string, Func<IOperationCalculator>> registry = new(); 
+        private static Dictionary<string, Func<IUnaryOperationCalculator>> unaryRegistry = new(); 
+        private static Dictionary<string, Func<IBinaryOperationCalculator>> binaryRegistry = new(); 
         private readonly ILogger logger;
 
         public DefaultOperationFactory(ILogger logger) {
             this.logger = logger;
         }
 
-        public void Register(string operation, Func<IOperationCalculator> calculator)
+        public void RegisterUnary(string operation, Func<IUnaryOperationCalculator> calculator)
         {
-            registry[operation] = calculator;
+            unaryRegistry[operation] = calculator;
         }
 
-        public IOperationCalculator Create(string operation)
+        public void RegisterBinary(string operation, Func<IBinaryOperationCalculator> calculator)
         {
-            if(registry.TryGetValue(operation,out var calculator))
+            binaryRegistry[operation] = calculator;
+        }
+
+        public IUnaryOperationCalculator CreateUnary(string operation)
+        {
+            if(unaryRegistry.TryGetValue(operation,out var calculator))
+                return calculator();
+
+            throw new ArgumentException("不支援的運算子");
+        }
+
+        public IBinaryOperationCalculator CreateBinary(string operation)
+        {
+            if(binaryRegistry.TryGetValue(operation,out var calculator))
                 return calculator();
 
             throw new ArgumentException("不支援的運算子");

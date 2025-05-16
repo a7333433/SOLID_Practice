@@ -2,6 +2,7 @@
 {
     public interface IOperationCalculatorFactory
     {
-        IOperationCalculator Create(string operation);
+        public IUnaryOperationCalculator CreateUnary(string operation);
+        public IBinaryOperationCalculator CreateBinary(string operation);
     }
 }

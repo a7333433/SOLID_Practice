@@ -1,4 +1,5 @@
-﻿using System;
+﻿using homework1.Loggers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace homework1.Calculators.OperationCalculator
 {
-    public class DefaultDivideCalculator : ITwoParameterOperationCalculator
+    public class DefaultDivideCalculator : IBinaryOperationCalculator
     {
         
         private readonly ILogger logger;
@@ -20,7 +21,7 @@ namespace homework1.Calculators.OperationCalculator
             if (b == 0)
             {
                 logger.Info("Cannot divide by zero");
-                return 0;
+                throw new ArgumentException("Cannot divide by zero");
             }
 
             return a / b;

@@ -1,6 +1,6 @@
 ﻿namespace homework1.Calculators.OperationCalculator
 {
-    public interface IOneParameterOperationCalculator:IOperationCalculator
+    public interface IUnaryOperationCalculator
     {
         double Calculate(double x);
     }

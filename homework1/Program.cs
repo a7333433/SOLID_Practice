@@ -1,6 +1,7 @@
-﻿using homework1;
-using homework1.Calculators;
+﻿using homework1.Calculators;
 using homework1.Calculators.OperationCalculator;
+using homework1.Loggers;
+using homework1.Stubs;
 using Microsoft.Extensions.DependencyInjection;
 
 var serviceProvider = new ServiceCollection()
@@ -10,11 +11,14 @@ var serviceProvider = new ServiceCollection()
 
         var factory = new DefaultOperationFactory(logger);
 
-        factory.Register(OperationConst.Abs, () => new DefaultAbsCalculator(logger));
-        factory.Register(OperationConst.Add, () => new DefaultAddCalculator(logger));
-        factory.Register(OperationConst.Subtract, () => new DefaultSubtractCalculator(logger));
-        factory.Register(OperationConst.Multiply, () => new DefaultMultiplyCalculator(logger));
-        factory.Register(OperationConst.Divide, () => new DefaultDivideCalculator(logger));
+        factory.RegisterUnary(OperationConst.Abs, () => new DefaultAbsCalculator(logger));
+
+        //模擬拆分任一運算為獨立服務（透過 stub 或 interface）
+        factory.RegisterBinary(OperationConst.Add, () => new StubAddCalculator(logger));
+
+        factory.RegisterBinary(OperationConst.Subtract, () => new DefaultSubtractCalculator(logger));
+        factory.RegisterBinary(OperationConst.Multiply, () => new DefaultMultiplyCalculator(logger));
+        factory.RegisterBinary(OperationConst.Divide, () => new DefaultDivideCalculator(logger));
 
         return factory;
     })
@@ -23,5 +27,8 @@ var serviceProvider = new ServiceCollection()
 
 var calculator = serviceProvider.GetRequiredService<ICalculator>();
 
-Console.WriteLine(calculator.Add(2, 5));
-Console.WriteLine(calculator.Divide(10, 0));
+//模擬服務，固定回傳10000
+Console.WriteLine(calculator.Add(1, 1));
+
+//錯誤捕捉器
+Console.WriteLine(calculator.Divide(2, 0));
